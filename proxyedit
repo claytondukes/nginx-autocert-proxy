@@ -1,0 +1,7 @@
+#!/bin/bash
+set -e
+LPATH=/tmp/$$-hosts.py
+RPATH=sslproxy_updater_1:/etc/nginx/hosts.py
+docker cp $RPATH $LPATH
+vim $LPATH
+docker cp $LPATH $RPATH

@@ -1,0 +1,24 @@
+version: '2'
+services:
+    updater:
+        build: updater
+        stop_signal: SIGINT
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - etc_nginx:/etc/nginx
+            - letsencrypt:/etc/letsencrypt
+            - well_known:/data/wellknown
+    nginx:
+        image: nginx
+        depends_on: ["updater"]
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - etc_nginx:/etc/nginx:ro
+            - letsencrypt:/etc/letsencrypt
+            - well_known:/data/wellknown
+volumes:
+    etc_nginx: {}
+    well_known: {}
+    letsencrypt: {}
