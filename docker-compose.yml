@@ -1,0 +1,26 @@
+---
+version: "3.8"
+services:
+  updater:
+    build: 
+     context: updater
+    stop_signal: SIGINT
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - nginx:/etc/nginx
+      - letsencrypt:/etc/letsencrypt
+      - wellknown:/data/wellknown
+  nginx:
+    image: nginx
+    depends_on: ["updater"]
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - nginx:/etc/nginx:ro
+      - letsencrypt:/etc/letsencrypt
+      - wellknown:/data/wellknown
+volumes:
+  nginx: {}
+  letsencrypt: {}
+  wellknown: {}
